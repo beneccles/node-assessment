@@ -36,16 +36,14 @@ module.exports = {
 
         if (favorites) {
             filteredArr = userData.filter((element) => {
-                for (let i = 0; i < element.favorites.length; i++) {
-                    if (element.favorites[i] === favorites) {
-                        console.log(element.favorites[i], favorites)
+                const favs = element.favorites;
+
+                for (let i = 0; i < favs.length; i++) {
+                    if (favs[i] === favorites) {
                         return true;
-                    } else {
-                        return false;
                     }
                 }
             })
-            console.log(filteredArr.length)
             res.status(200).send(filteredArr)
         }
 
@@ -142,13 +140,20 @@ module.exports = {
     async deleteUser(req, res) {
         const { userId } = req.params;
         let updateData = userData
-        const filteredArr = updateData.filter((element) => {
+        console.log(updateData.length)
+        const filteredArr = userData.filter((element) => {
             if (element.id === parseInt(userId)) {
+                for (let i = 0; i > userData.length; i++) {
+                    if (userData[i].id === element.id) {
+                        userData.splice(i, 1, "")
+                    }
+                }
                 return false
             } else {
                 return true
             }
         })
+
 
         if (filteredArr.length === 0) {
             res.sendStatus(404)
