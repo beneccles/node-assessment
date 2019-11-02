@@ -101,6 +101,16 @@ module.exports = {
     },
     // GET /api/type/ + userType
     async userType(req, res) {
+        const {userType} = req.params;
+        filteredArr = userData.filter((element) => {
+            if (element.type === userType) {
+                return true
+            } else {
+                return false
+            }
+        })
+
+        res.status(200).send(filteredArr)
 
     },
     // PUT /api/user/ + userId
