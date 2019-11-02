@@ -140,7 +140,6 @@ module.exports = {
     async deleteUser(req, res) {
         const { userId } = req.params;
         let updateData = userData
-        console.log(updateData.length)
         const filteredArr = userData.filter((element) => {
             if (element.id === parseInt(userId)) {
                 for (let i = 0; i > userData.length; i++) {
