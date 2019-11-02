@@ -6,7 +6,7 @@ module.exports = {
     //  - "age" Return all users who have an age less than this age
     // - "email" Return all users whose email matches.
     // - "favorites" Return all users who have this favorite in their array of favorites.
-    async users(req, res) {
+    users(req, res) {
         const {age, email, favorites} = req.query
         let filteredArr = [];
 
@@ -54,7 +54,7 @@ module.exports = {
     // GET /api/user/ + userId
     // userId as a param string, if user found respond with status 200 and send that user's object/
     // Otherwise, 404
-    async user(req, res) {
+   user(req, res) {
         const {userId} = req.params;
         // I could take advantage of the fact the ids are in array order,
         // but in this case I choose to pretend that it wasn't.
@@ -75,8 +75,16 @@ module.exports = {
     },
     // GET /api/admin
     // Respond 200, with array of all users who are admins
-    async admin(req, res) {
+    admin(req, res) {
+        filteredArr = userData.filter((element) => {
+            if (element.type === "admin") {
+                return true
+            } else {
+                return false
+            }
+        })
 
+        res.status(200).send(filteredArr)
     },
     // GET /api/nonadmin
     // Respond 200, with array of all non-admin users.
