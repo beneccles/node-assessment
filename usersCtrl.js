@@ -89,7 +89,15 @@ module.exports = {
     // GET /api/nonadmin
     // Respond 200, with array of all non-admin users.
     async nonAdmin(req, res) {
+        filteredArr = userData.filter((element) => {
+            if (element.type !== "admin") {
+                return true
+            } else {
+                return false
+            }
+        })
 
+        res.status(200).send(filteredArr)
     },
     // GET /api/type/ + userType
     async userType(req, res) {
