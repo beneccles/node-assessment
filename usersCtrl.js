@@ -8,7 +8,7 @@ module.exports = {
     // - "favorites" Return all users who have this favorite in their array of favorites.
     users(req, res) {
         const {age, email, favorites} = req.query
-        let filteredArr = [];
+        let filteredArr = userData
 
         if (age) {
             filteredArr = userData.filter((element) => {
@@ -38,17 +38,20 @@ module.exports = {
             filteredArr = userData.filter((element) => {
                 for (let i = 0; i < element.favorites.length; i++) {
                     if (element.favorites[i] === favorites) {
+                        console.log(element.favorites[i], favorites)
                         return true;
                     } else {
                         return false;
                     }
                 }
             })
-
+            console.log(filteredArr.length)
             res.status(200).send(filteredArr)
         }
 
-        res.status(200).send(userData)
+        if (!age || !email || !favorites) {
+            res.status(200).send(filteredArr)
+        }
 
     },
     // GET /api/user/ + userId
@@ -68,7 +71,7 @@ module.exports = {
         })
 
         if (filteredArr.length > 0) {
-            res.status(200).send(filteredArr)
+            res.status(200).send(filteredArr[0])
         } else {
             res.sendStatus(404)
         }
@@ -116,19 +119,43 @@ module.exports = {
     // PUT /api/user/ + userId
     // Recieve a users info in request body. Update user with matching ID
     async userUpdate(req, res) {
+        const {userId} = req.params;
+        const update = {id: parseInt(userId), ...req.body};
+        const updatedArray = userData;
+        updatedArray.splice(parseInt(userId) - 1, 1, update)
+
+        res.status(200).send(updatedArray)
 
     },
     // POST /api/user
     // Users info in request body to be added to userData array.
     // Add ID before pushing it to userData
     async newUser(req, res) {
-
+        let newUser = {id: userData.length + 1, ...req.body}
+        const newArr = userData;
+        newArr.push(newUser)
+        res.status(200).send(newArr)
     },
     // DELETE /api/user/ + userId
     // Remove user based on passed in userID param
     // Return status 200 and the array of user objects after the correct user object has been removed.
     async deleteUser(req, res) {
+        const { userId } = req.params;
+        let updateData = userData
+        const filteredArr = updateData.filter((element) => {
+            if (element.id === parseInt(userId)) {
+                return false
+            } else {
+                return true
+            }
+        })
 
+        if (filteredArr.length === 0) {
+            res.sendStatus(404)
+        } else {
+            res.status(200).send(filteredArr)
+        }
+  
     }
 
 }
